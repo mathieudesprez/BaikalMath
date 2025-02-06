@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mini-Jeu de Calcul Mental</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+            background-image: url('Baikal.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        .question {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        input, button {
+            font-size: 18px;
+            padding: 10px;
+        }
+        #imageBravo {
+            display: none;
+            position: absolute;
+            right: 10%;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 150px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Mini-Jeu de Calcul Mental</h1>
+    <div id="questions"></div>
+    <button onclick="verifierReponses()">Vérifier</button>
+    <p id="resultat"></p>
+    <img id="imageBravo" src="bravo.png" alt="Bravo !">
+
+    <script>
+        let questions = [];
+        let bonnesReponses = 0;
+
+        function genererQuestions() {
+            let container = document.getElementById("questions");
+            container.innerHTML = "";
+            for (let i = 0; i < 5; i++) {
+                let nombre1 = Math.floor(Math.random() * 10) + 1;
+                let nombre2 = Math.floor(Math.random() * 10) + 1;
+                let resultatAttendu = nombre1 * nombre2;
+                
+                questions.push({ nombre1, nombre2, resultatAttendu });
+                
+                let questionHTML = `
+                    <p class='question'>Combien font ${nombre1} x ${nombre2} ?</p>
+                    <input type='number' id='reponse${i}' placeholder='Ta réponse'>
+                `;
+                container.innerHTML += questionHTML;
+            }
+        }
+        
+        function verifierReponses() {
+            bonnesReponses = 0;
+            for (let i = 0; i < 5; i++) {
+                let reponseUtilisateur = document.getElementById(`reponse${i}`).value;
+                if (parseInt(reponseUtilisateur) === questions[i].resultatAttendu) {
+                    bonnesReponses++;
+                }
+            }
+            if (bonnesReponses === 5) {
+                document.getElementById("resultat").innerText = "Toutes les réponses sont correctes !";
+                document.getElementById("imageBravo").style.display = "block";
+            } else {
+                document.getElementById("resultat").innerText = `Tu as ${bonnesReponses}/5 bonnes réponses. Essaie encore !`;
+                document.getElementById("imageBravo").style.display = "none";
+            }
+        }
+        
+        genererQuestions();
+    </script>
+</body>
+</html>
